@@ -16,15 +16,17 @@ CÁC CHỨC NĂNG:
 - Checkout: thông tin nhận hàng, COD hoặc chuyển khoản mô phỏng.
 - Xác nhận đặt hàng bằng popup, màn hình thành công.
 - Theo dõi đơn hàng, hủy đơn khi còn chờ xác nhận.
-- Admin demo: duyệt đơn -> giao hàng -> hoàn thành; từ chối đơn.
+- Trang Admin riêng (admin.html): đăng nhập demo, xem thống kê, thêm/sửa/xóa sản phẩm, tìm kiếm và lọc danh mục.
+- Quản lý đơn: xem chi tiết, xác nhận -> giao hàng -> hoàn thành; từ chối đơn.
 - Tài khoản đăng ký / đăng nhập demo.
 - Responsive trên laptop, tablet, điện thoại.
 
 THỬ LUỒNG:
 Trang chủ -> sản phẩm -> chọn size + màu -> thêm giỏ -> giỏ hàng
 -> thanh toán -> đặt hàng -> xác nhận -> theo dõi đơn
--> Admin (truy cập /#/admin hoặc link tại trang tài khoản)
--> xử lý đơn -> quay lại đơn hàng để xem trạng thái.
+-> Admin (truy cập admin.html hoặc link ở trang Tài khoản)
+-> đăng nhập tài khoản demo: admin@fashionly.demo / admin123
+-> thêm/sửa/xóa sản phẩm hoặc xử lý đơn -> quay lại cửa hàng để xem thay đổi.
 
 MÃ VOUCHER DEMO:
 FASHION100 (giảm 100.000đ, đơn từ 799.000đ)
@@ -35,7 +37,9 @@ Miễn phí ship từ 499.000đ; dưới mức này ship 30.000đ.
 LƯU Ý:
 - Demo front-end, dữ liệu lưu bằng localStorage của trình duyệt.
 - Chưa có backend, cơ sở dữ liệu server, tài khoản bảo mật hoặc cổng thanh toán thật.
-- Admin demo không có phân quyền: chỉ dùng để trình bày bài tập HCI.
+- Admin dùng biểu mẫu đăng nhập demo, không phải cơ chế phân quyền/bảo mật máy chủ.
+- Danh mục sản phẩm Admin được lưu vào localStorage và hiển thị khi tải lại cửa hàng.
+- Chức năng ảnh sản phẩm hỗ trợ chọn ảnh mẫu hoặc nhập URL HTTPS; không tải ảnh lên máy chủ.
 - Đơn hàng chỉ đồng bộ giữa các tab trong cùng trình duyệt/cùng địa chỉ web,
   không tự đồng bộ giữa các máy khác nhau.
 - Ảnh sản phẩm/banner được cắt từ ảnh chụp Figma do người dùng cung cấp,
