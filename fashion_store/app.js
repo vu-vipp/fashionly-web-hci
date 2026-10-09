@@ -20,7 +20,7 @@ let afterLogin='/checkout';
 function requireLogin(target){if(state.user)return true;afterLogin=target;toast('Vui lòng đăng nhập trước khi tiếp tục đặt hàng');nav('/account');return false;}
 function userOrders(){return state.orders.filter(o=>o.ownerEmail&&o.ownerEmail===state.user?.email);}
 const money=n=>Number(n).toLocaleString('vi-VN')+' ₫';
-const img=p=>/^https:\/\/[^\s\"'<>]+$/i.test(String(p))?p:'assets/'+(/^[a-z0-9_-]+\.(?:png|jpe?g|webp)$/i.test(String(p))?p:'polo.jpg');
+const img=p=>/^data:image\/(?:webp|jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(String(p))?p:(/^https:\/\/[^\s\"'<>]+$/i.test(String(p))?p:'assets/'+(/^[a-z0-9_-]+\.(?:png|jpe?g|webp)$/i.test(String(p))?p:'polo.jpg'));
 const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $=s=>document.querySelector(s);
 let detail={size:'',color:'',qty:1};let currentOrderId=null;let toastTimer;
