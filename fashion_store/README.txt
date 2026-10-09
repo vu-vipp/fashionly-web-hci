@@ -39,7 +39,10 @@ LƯU Ý:
 - Chưa có backend, cơ sở dữ liệu server, tài khoản bảo mật hoặc cổng thanh toán thật.
 - Admin dùng biểu mẫu đăng nhập demo, không phải cơ chế phân quyền/bảo mật máy chủ.
 - Danh mục sản phẩm Admin được lưu vào localStorage và hiển thị khi tải lại cửa hàng.
-- Chức năng ảnh sản phẩm hỗ trợ chọn ảnh mẫu hoặc nhập URL HTTPS; không tải ảnh lên máy chủ.
+- Admin hỗ trợ chọn ảnh JPG/PNG/WebP trực tiếp từ thư mục máy tính hoặc thư viện điện thoại.
+- Ảnh tự nén và lưu cùng dữ liệu sản phẩm trong localStorage trình duyệt, không tải lên máy chủ.
+- Dữ liệu ảnh có giới hạn dung lượng của trình duyệt. Đổi thiết bị/trình duyệt hoặc xóa dữ liệu Web có thể làm mất ảnh; ảnh không đồng bộ giữa các máy.
+- Admin vẫn có thể chọn ảnh mẫu hoặc nhập URL HTTPS.
 - Đơn hàng chỉ đồng bộ giữa các tab trong cùng trình duyệt/cùng địa chỉ web,
   không tự đồng bộ giữa các máy khác nhau.
 - Ảnh sản phẩm/banner được cắt từ ảnh chụp Figma do người dùng cung cấp,
