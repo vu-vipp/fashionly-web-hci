@@ -93,3 +93,52 @@
 .header .brand-logo-image{display:block;width:72px;height:68px;object-fit:contain;flex-shrink:0}
 @media(max-width:850px){.header .brand-logo-image{width:62px;height:59px}}
 @media(max-width:570px){.header .brand-logo-image{width:54px;height:51px}}
+
+/* Phương Beauty screenshot-style sign-up and log-in */
+body.on-account main{min-height:0}
+.account-page{width:100%}
+.auth-hero{background:#050505;color:#fff;min-height:455px;padding:30px 30px 35px}
+.auth-layout{width:min(1100px,100%);min-height:390px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(315px,355px);align-items:center;gap:60px}
+.auth-intro{text-align:center;display:flex;align-items:center;justify-content:center}
+.auth-intro h1{font:bold clamp(18px,2.1vw,23px)/1.32 Arial,Helvetica,sans-serif;color:#fff;margin:0;max-width:360px}
+.auth-card{width:100%;background:#fff;color:#141414;border-radius:10px;padding:20px 21px 15px;box-shadow:0 5px 15px #00000015}
+.auth-card h2{font:400 17px/1.35 Arial,Helvetica,sans-serif;margin:0 0 22px}
+.auth-card .auth-form{padding:0;margin:0;border:0;background:transparent}
+.auth-card .auth-input-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.auth-card .auth-input{display:block;width:100%;height:43px;padding:11px 15px;border:1px solid #939393;border-radius:0;background:#f8f8f8;color:#111;font-size:12px;outline-offset:2px;margin-bottom:20px}
+.auth-card .auth-input::placeholder{font-size:12px;color:#a9a9a9}
+.auth-card .auth-input:focus-visible{outline:2px solid #393939;border-color:#333}
+.auth-card .auth-error{min-height:0;margin:0;font-size:12px;line-height:1.4;color:#bd2637}
+.auth-card .auth-error:not(:empty){margin:-10px 0 12px}
+.auth-card .auth-submit{display:block;width:100%;height:43px;border:0;border-radius:0;color:#fff;background:#080808;font-size:12px;font-weight:400;letter-spacing:.2px;cursor:pointer}
+.auth-card .auth-submit:hover{background:#292929}
+.auth-divider{display:flex;align-items:center;gap:9px;margin:21px 0 12px;color:#999;font:400 10px/1 Arial,Helvetica,sans-serif}
+.auth-divider::before,.auth-divider::after{content:"";height:1px;background:#c8c8c8;flex:1}
+.auth-socials{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.auth-social{min-width:0;height:38px;background:#f8f8f8;border:1px solid #aaa;border-radius:0;color:#111;font:400 12px/1 Arial,Helvetica,sans-serif;display:flex;gap:9px;align-items:center;justify-content:center}
+.auth-social:hover{background:#eee}
+.fb-mark{height:20px;width:20px;line-height:23px;border-radius:50%;background:#1877f2;color:#fff;text-align:center;font:bold 19px/20px Arial,Helvetica,sans-serif}
+.google-mark{font:bold 20px/1 Arial,Helvetica,sans-serif;background:conic-gradient(#4285f4 0deg 95deg,#34a853 95deg 170deg,#fbbc05 170deg 230deg,#ea4335 230deg 295deg,#4285f4 295deg);color:transparent;background-clip:text;-webkit-background-clip:text}
+.auth-switch{display:block;margin:12px auto 0;padding:1px 8px;border:0;background:transparent;color:#222;font-size:12px;cursor:pointer;text-decoration:none}
+.auth-switch:hover{text-decoration:underline}
+.auth-note{font-size:10px;line-height:1.5;color:#888;text-align:center;margin:13px 0 0}
+.auth-admin-link{display:block;margin-top:10px;color:#777;font-size:11px;text-align:center;text-decoration:underline}
+.auth-admin-link:hover{color:#111}
+.auth-user-identifier{font-size:13px;color:#777;overflow-wrap:anywhere}
+.auth-logout{margin:9px 0 2px;width:100%;padding:11px;border:1px solid #777;color:#111;background:#fff}
+.account-signed h2{font-size:19px;font-weight:700;margin-bottom:13px}
+.account-signed p{font-size:14px;margin:11px 0}
+body.on-account .footer{margin-top:0;padding-top:28px}
+@media(max-width:760px){
+  .auth-hero{padding:28px 16px 35px}
+  .auth-layout{min-height:0;max-width:380px;grid-template-columns:1fr;gap:24px}
+  .auth-intro h1{font-size:19px}
+  .auth-card{max-width:380px;margin:0 auto}
+}
+@media(max-width:420px){
+  .auth-hero{padding:22px 13px 30px}
+  .auth-layout{gap:18px}
+  .auth-card{padding:20px 16px 14px}
+  .auth-socials{gap:9px}
+  .auth-social{font-size:11px}
+}
