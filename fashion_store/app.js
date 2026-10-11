@@ -120,7 +120,7 @@ function handleAuth(form){
    toast('Đăng nhập thành công');
  }else if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)){
    let legacy=null;try{legacy=JSON.parse(localStorage.getItem('fashionly_demo_credentials')||'null')}catch{}
-   if(!legacy||legacy.email.toLowerCase()!==identifier.toLowerCase()||legacy.password!==password)return error('Email hoặc mật khẩu tài khoản cũ không đúng.');
+   if(!legacy||String(legacy.email||'').toLowerCase()!==identifier.toLowerCase()||legacy.password!==password)return error('Email hoặc mật khẩu tài khoản cũ không đúng.');
    state.user={name:legacy.name||identifier.split('@')[0],email:legacy.email};
    toast('Đăng nhập email cũ thành công');
  }else return error('Nhập số điện thoại hợp lệ hoặc email tài khoản cũ.');
