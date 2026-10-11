@@ -174,3 +174,35 @@ body.on-account > .header,body.on-account > .nav{display:none!important}
 .product-carousel-track .product-image{height:230px}
 .product-carousel-arrow{width:31px;height:31px;font-size:25px}
 }
+
+/* Customer account hover dropdown */
+.header{position:relative;z-index:40}
+.account-menu{position:relative;display:flex;align-items:center;justify-content:center;z-index:50}
+.account-menu .account-trigger{width:100%}
+.account-dropdown{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  z-index:100;min-width:166px;padding:7px 0;
+  border:1px solid #e5e5e5;border-radius:7px;background:#fff;
+  box-shadow:0 9px 24px rgba(0,0,0,.13);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .16s ease,visibility .16s ease;
+}
+.account-menu.is-open .account-dropdown{opacity:1;visibility:visible;pointer-events:auto}
+@media(hover:hover){
+  .account-menu:hover .account-dropdown,
+  .account-menu:focus-within .account-dropdown{opacity:1;visibility:visible;pointer-events:auto}
+}
+.account-menu.is-open .account-trigger,
+.account-menu:hover .account-trigger{background:#f5f5f5;color:#242424}
+.account-menu-item{
+  width:100%;min-height:43px;display:flex;align-items:center;
+  padding:10px 16px;border:0;border-radius:0;background:#fff;
+  color:#292929;text-align:left;white-space:nowrap;
+  font:400 13px/1.35 Arial,Helvetica,sans-serif;cursor:pointer;
+}
+.account-menu-item:hover,.account-menu-item:focus-visible{background:#f2f2f2;color:#111}
+.account-menu-item:focus-visible{outline:2px solid #222;outline-offset:-3px}
+@media(max-width:570px){
+  .account-dropdown{min-width:145px}
+  .account-menu-item{min-height:44px;font-size:13px;padding:10px 13px}
+}
