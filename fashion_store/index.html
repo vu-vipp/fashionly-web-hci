@@ -8,13 +8,19 @@
     <path d="M9 20v-6h6v6"></path>
   </svg></span><small>Cửa hàng</small>
 </button>
-<button type="button" class="icon-action" data-nav="/account" aria-label="Tài khoản">
+<div class="account-menu" id="accountMenu">
+<button type="button" class="icon-action account-trigger" id="accountTrigger" aria-label="Tài khoản - mở menu" aria-haspopup="true" aria-controls="accountDropdown" aria-expanded="false">
   <span class="action-icon"><svg class="action-svg action-svg-user" aria-hidden="true" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="10" fill="currentColor"></circle>
     <circle cx="12" cy="9" r="3.2" fill="#fff"></circle>
     <path d="M5.6 19.2c.3-3.7 2.9-5.5 6.4-5.5s6.1 1.8 6.4 5.5" fill="#fff"></path>
   </svg></span><small>Tài khoản</small>
 </button>
+<div class="account-dropdown" id="accountDropdown" aria-label="Tùy chọn tài khoản">
+  <button type="button" class="account-menu-item" data-account-mode="login">Đăng nhập</button>
+  <button type="button" class="account-menu-item" data-account-mode="register">Đăng ký</button>
+</div>
+</div>
 <button type="button" class="icon-action" data-nav="/cart" aria-label="Giỏ hàng">
   <span class="action-icon"><svg class="action-svg action-svg-bag" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M5 8.5h14l1.5 10a2 2 0 0 1-2 2.3H5.5a2 2 0 0 1-2-2.3L5 8.5Z"></path>
