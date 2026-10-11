@@ -51,3 +51,39 @@
   .header-actions .action-svg{width:27px;height:27px}
   .header-actions .icon-action small{font-size:10px}
 }
+
+/* Fashionly reference footer: four columns, payment and social badges */
+.footer{margin-top:75px;background:#fff;padding:0 12px 23px;color:#111}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr .86fr .83fr;column-gap:28px;row-gap:38px;align-items:start}
+.footer-column{min-width:0}
+.footer-column h4{font:700 14px/1.3 Arial,Helvetica,sans-serif;letter-spacing:0;margin:0 0 21px;color:#090909}
+.footer-links{display:flex;flex-direction:column;align-items:flex-start;gap:19px}
+.footer-links span{font:400 12px/1.45 Arial,Helvetica,sans-serif;color:#161616}
+.footer-payments .payment-methods{height:32px;display:flex;align-items:center;gap:19px;margin-top:-7px}
+.footer-payments .visa-logo{display:inline-block;font:italic 900 20px/1 Arial,Helvetica,sans-serif;letter-spacing:-1px;color:#18266b}
+.footer-payments .jcb-logo{height:26px;display:flex;align-items:stretch;gap:1px;filter:drop-shadow(0 0 1px #0001);transform:skewY(-3deg)}
+.footer-payments .jcb-logo span{display:grid;place-items:center;width:13px;color:white;font:bold 16px/1 Arial,Helvetica,sans-serif}
+.footer-payments .jcb-logo span:nth-child(1){background:#1764a4}
+.footer-payments .jcb-logo span:nth-child(2){background:#d22e45}
+.footer-payments .jcb-logo span:nth-child(3){background:#159357}
+.footer-column .logistics-heading{margin-top:25px;margin-bottom:12px}
+.logistics-logo{font:200 26px/1 Arial,Helvetica,sans-serif;letter-spacing:-3px;color:#bdbdbd}
+.social-links{display:flex;flex-direction:column;gap:27px;margin-top:-6px}
+.social-row{display:flex;align-items:center;gap:8px;font:400 12px/1.4 Arial,Helvetica,sans-serif;color:#141414;min-height:25px}
+.social-icon{display:block;width:23px;height:23px;flex-shrink:0}
+.footer .copyright{max-width:1200px;margin:51px auto 0;border-top:1px solid #999;padding:18px 0 0;font:400 12px/1.5 Arial,Helvetica,sans-serif;color:#222}
+@media(max-width:700px){
+  .footer{margin-top:48px;padding:10px 16px 20px}
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:23px;row-gap:34px}
+  .footer-column h4{font-size:13px;margin-bottom:17px}
+  .footer-links{gap:16px}
+  .footer-links span,.social-row{font-size:12px}
+  .footer .copyright{margin-top:34px}
+}
+@media(max-width:360px){
+  .footer{padding-left:13px;padding-right:13px}
+  .footer-grid{column-gap:12px}
+  .footer-column h4{font-size:12px}
+  .social-row{gap:5px;font-size:11px}
+  .social-icon{width:20px;height:20px}
+}
