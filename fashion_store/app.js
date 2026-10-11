@@ -82,7 +82,93 @@ function setupHeroCarousel(){
   heroVisibilityCleanup=()=>document.removeEventListener('visibilitychange',onVisibility);
   goTo(0);start();
 }
-function home(){return `${heroBanner()}<div class="container">${vouchers()}<section class="section"><h2 class="section-title">SẢN PHẨM MỚI</h2><div class="products">${PRODUCTS.slice(0,4).map(productCard).join('')}</div></section></div><div class="homewear"><div class="homewear-text"><h2>HOMEWEAR</h2><p>Được kiểm định theo QUY CHUẨN QUỐC TẾ, an toàn tuyệt đối với mọi thành phần trong sản phẩm giúp những phút giây ở nhà thêm trọn vẹn.</p></div></div><div class="container"><section class="section"><h2 class="section-title">KHÁM PHÁ PHONG CÁCH</h2><div class="products">${[PRODUCTS[3],PRODUCTS[1],PRODUCTS[2],PRODUCTS[0]].filter(Boolean).map(productCard).join('')}</div><div class="center"><button class="btn btn-pink btn-sm more" data-nav="/shop">Xem thêm sản phẩm →</button></div></section></div>`}
+function productCarousel(items,id,title){
+  return `<div class="product-carousel" data-product-carousel>
+    <div class="product-carousel-head">
+      <h2 class="section-title">${escapeHTML(title)}</h2>
+      <div class="product-carousel-actions" aria-label="Điều khiển sản phẩm ${escapeHTML(title)}">
+        <button class="product-carousel-arrow" type="button" data-carousel-step="-1" aria-label="Kéo sang trái" aria-controls="${id}">‹</button>
+        <button class="product-carousel-arrow" type="button" data-carousel-step="1" aria-label="Kéo sang phải" aria-controls="${id}">›</button>
+      </div>
+    </div>
+    <div class="product-carousel-track" id="${id}" role="region" aria-label="${escapeHTML(title)} — vuốt trái hoặc phải để xem thêm sản phẩm" tabindex="0">
+      ${items.map(productCard).join('')}
+    </div>
+  </div>`;
+}
+let productCarouselCleanup=()=>{};
+function setupProductCarousels(){
+  productCarouselCleanup();
+  const cleanup=[];
+  document.querySelectorAll('[data-product-carousel]').forEach(root=>{
+    const track=root.querySelector('.product-carousel-track');
+    const prev=root.querySelector('[data-carousel-step="-1"]');
+    const next=root.querySelector('[data-carousel-step="1"]');
+    if(!track||!prev||!next)return;
+    const updateButtons=()=>{
+      prev.disabled=track.scrollLeft<=2;
+      next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-2;
+    };
+    const advance=dir=>{
+      const card=track.querySelector('.product-card');
+      const gap=parseFloat(getComputedStyle(track).gap)||0;
+      const step=(card?.getBoundingClientRect().width||240)+gap;
+      track.scrollBy({left:step*dir,behavior:'smooth'});
+    };
+    root.addEventListener('click',event=>{
+      const control=event.target.closest('[data-carousel-step]');
+      if(!control)return;
+      advance(Number(control.dataset.carouselStep));
+    });
+    let mouse=null,lastDragAt=0;
+    track.addEventListener('dragstart',e=>e.preventDefault());
+    track.addEventListener('pointerdown',e=>{
+      if(e.pointerType!=='mouse'||e.button!==0||e.target.closest('button'))return;
+      mouse={x:e.clientX,scrollLeft:track.scrollLeft,moved:false};
+    });
+    track.addEventListener('pointermove',e=>{
+      if(!mouse)return;
+      const dx=e.clientX-mouse.x;
+      if(Math.abs(dx)>6)mouse.moved=true;
+      if(!mouse.moved)return;
+      track.style.scrollSnapType='none';
+      track.classList.add('is-dragging');
+      track.scrollLeft=mouse.scrollLeft-dx;
+    });
+    const finish=()=>{
+      if(mouse?.moved)lastDragAt=Date.now();
+      mouse=null;
+      track.classList.remove('is-dragging');
+      track.style.scrollSnapType='';
+      updateButtons();
+    };
+    track.addEventListener('pointerup',finish);
+    track.addEventListener('pointercancel',finish);
+    track.addEventListener('pointerleave',finish);
+    track.addEventListener('click',e=>{
+      if(Date.now()-lastDragAt<300){e.preventDefault();e.stopPropagation();}
+    },true);
+    track.addEventListener('scroll',updateButtons,{passive:true});
+    const onResize=()=>updateButtons();
+    window.addEventListener('resize',onResize);
+    cleanup.push(()=>window.removeEventListener('resize',onResize));
+    updateButtons();
+  });
+  productCarouselCleanup=()=>cleanup.forEach(fn=>fn());
+}
+function home(){
+  const newest=[...PRODUCTS.filter(p=>p.new),...PRODUCTS.filter(p=>!p.new)];
+  const styleList=[PRODUCTS[3],PRODUCTS[1],PRODUCTS[2],PRODUCTS[0],...PRODUCTS.slice(4)].filter(Boolean);
+  return `${heroBanner()}<div class="container">${vouchers()}
+    <section class="section">${productCarousel(newest,'new-product-slider','SẢN PHẨM MỚI')}</section>
+  </div>
+  <div class="homewear"><div class="homewear-text"><h2>HOMEWEAR</h2><p>Được kiểm định theo QUY CHUẨN QUỐC TẾ, an toàn tuyệt đối với mọi thành phần trong sản phẩm giúp những phút giây ở nhà thêm trọn vẹn.</p></div></div>
+  <div class="container">
+    <section class="section">${productCarousel(styleList,'style-product-slider','KHÁM PHÁ PHONG CÁCH')}
+      <div class="center"><button class="btn btn-pink btn-sm more" data-nav="/shop">Xem thêm sản phẩm →</button></div>
+    </section>
+  </div>`;
+}
 function shop(params){const category=params.get('category')||'all',sort=params.get('sort')||'default',q=(params.get('q')||'').toLowerCase();let items=PRODUCTS.filter(p=>(category==='all'||p.category===category)&&(!q||p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q)));if(sort==='sale')items.sort((a,b)=>b.discount-a.discount);if(sort==='low')items.sort((a,b)=>a.price-b.price);if(sort==='high')items.sort((a,b)=>b.price-a.price);if(sort==='new')items.sort((a,b)=>Number(b.new)-Number(a.new));return `<div class="container"><div class="breadcrumb">Trang chủ / Sản phẩm</div><h1 class="page-title">${q?'Kết quả tìm kiếm: '+escapeHTML(q):'Tất cả sản phẩm'}</h1><div class="layout-sidebar"><aside class="sidebar"><h3>Danh mục</h3>${[['all','Tất cả'],['Nam','Thời trang Nam'],['Nu','Thời trang Nữ'],['Dong-phuc','Đồng phục']].map(([v,t])=>`<a class="filter-link ${category===v?'active':''}" href="#/shop?category=${v}">${t}</a>`).join('')}<hr class="divider"><p class="muted">Lọc theo danh mục và sắp xếp sản phẩm để tìm món đồ phù hợp.</p></aside><section><div class="toolbar"><span class="muted">${items.length} sản phẩm</span><select id="sortSelect" aria-label="Sắp xếp"><option value="default" ${sort==='default'?'selected':''}>Mặc định</option><option value="new" ${sort==='new'?'selected':''}>Mới nhất</option><option value="sale" ${sort==='sale'?'selected':''}>Giảm giá nhiều</option><option value="low" ${sort==='low'?'selected':''}>Giá thấp đến cao</option><option value="high" ${sort==='high'?'selected':''}>Giá cao đến thấp</option></select></div>${items.length?`<div class="products">${items.map(productCard).join('')}</div>`:'<div class="empty">Không tìm thấy sản phẩm phù hợp.</div>'}</section></div></div>`}
 function detailPage(id){const p=PRODUCTS.find(x=>x.id===id);if(!p)return notFound();detail={size:'',color:'',qty:1};return `<div class="container"><div class="breadcrumb"><a href="#/">Trang chủ</a> / <a href="#/shop">Sản phẩm</a> / ${escapeHTML(p.name)}</div><div class="detail-layout"><div class="detail-image"><img src="${img(p.large||p.img)}" alt="${escapeHTML(p.name)}"></div><div class="detail-info"><h1>${escapeHTML(p.name)}</h1><div class="sku">SKU: ${p.sku}</div><div class="detail-price"><span class="old">${money(p.old)}</span> &nbsp; <strong style="color:#df2028">${money(p.price)}</strong> <span class="sale">-${p.discount}%</span></div><div class="promo"><strong>FINAL<br>SALE</strong><span>Giảm thêm<br><strong>200K</strong><br><small>Đơn từ 1.199K</small></span><span>Giảm thêm<br><strong>100K</strong><br><small>Đơn từ 799K</small></span></div><div class="option-row"><strong>Màu sắc: <span id="colorLabel" class="muted"></span></strong><div class="choices">${[['Đỏ','#e00000'],['Đen','#151515'],['Trắng','#fff'],['Xanh','#45884e']].map(([name,hex])=>`<button class="choice color-choice" data-color="${name}" style="background:${hex}" aria-label="${name}" title="${name}"></button>`).join('')}</div></div><div class="option-row"><strong>Kích cỡ: <span id="sizeLabel" class="muted"></span></strong><div class="choices">${['S','M','L','XL'].map(s=>`<button class="choice" data-size="${s}">${s}</button>`).join('')}</div></div><div class="option-row"><strong>Số lượng</strong><div class="qty-control"><button data-qty="-1">−</button><span id="detailQty">1</span><button data-qty="1">+</button></div></div><div class="detail-actions"><button class="btn btn-red" data-add="${p.id}">Thêm vào giỏ hàng</button><button class="btn" data-buy="${p.id}">Đặt hàng</button></div><hr class="divider"><strong>Mô tả:</strong><p class="desc">${escapeHTML(p.desc)}</p><hr class="divider"></div></div><section class="section"><h2 class="section-title">Sản phẩm cùng phong cách</h2><div class="products">${PRODUCTS.filter(x=>x.id!==p.id).slice(0,4).map(productCard).join('')}</div></section></div>`}
 function addCart(id,goCheckout=false){const p=PRODUCTS.find(x=>x.id===id);if(!p)return;if(!detail.size||!detail.color){toast('Vui lòng chọn màu sắc và kích cỡ trước khi mua!');return}const existing=state.cart.find(x=>x.id===id&&x.size===detail.size&&x.color===detail.color);if(existing)existing.qty+=detail.qty;else state.cart.push({id,size:detail.size,color:detail.color,qty:detail.qty});save();updateCount();toast('Đã thêm sản phẩm vào giỏ hàng!');if(goCheckout)nav('/checkout')}
@@ -168,7 +254,7 @@ function account(){
 function admin(){const total=state.orders.length,pending=state.orders.filter(o=>o.status==='pending').length;return `<div class="container"><div class="breadcrumb">Trang chủ / Quản trị</div><h1 class="page-title">QUẢN TRỊ ĐƠN HÀNG <span class="pill">DEMO ADMIN</span></h1><div class="admin-layout"><aside class="admin-nav"><button data-nav="/admin">▦ Tổng quan</button><button data-nav="/admin">▤ Quản lý đơn hàng</button><button data-nav="/shop">◫ Xem sản phẩm</button><button data-nav="/">⌂ Trang chủ</button></aside><section><div class="stats"><div class="stat"><span>Tổng đơn hàng</span><b>${total}</b></div><div class="stat"><span>Chờ xác nhận</span><b>${pending}</b></div><div class="stat"><span>Doanh thu mô phỏng</span><b style="font-size:18px">${money(state.orders.filter(o=>o.status!=='cancelled').reduce((n,o)=>n+o.total,0))}</b></div></div><h2>Danh sách đơn hàng</h2>${total?`<table class="admin-table"><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Tổng tiền</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>${state.orders.map(o=>`<tr><td><b>${o.id}</b><div class="muted">${o.created}</div></td><td>${escapeHTML(o.customer.name)}<div class="muted">${escapeHTML(o.customer.phone)}</div></td><td>${money(o.total)}</td><td>${status(o.status)}</td><td><button data-nav="/admin/order/${o.id}">Xử lý đơn →</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Chưa có đơn hàng. Hãy tạo đơn từ trang khách hàng để thử chức năng Admin.</div>'}</section></div></div>`}
 function adminOrder(id){const o=state.orders.find(x=>x.id===id);if(!o)return notFound();return `<div class="container"><div class="breadcrumb"><a href="#/admin">Admin</a> / Chi tiết đơn ${o.id}</div><h1 class="page-title">DUYỆT ĐƠN HÀNG #${o.id}</h1><div class="panel"><div class="order-card-head"><h3>Thông tin đơn hàng</h3>${status(o.status)}</div><p><b>Khách:</b> ${escapeHTML(o.customer.name)} · ${escapeHTML(o.customer.phone)}<br><b>Địa chỉ:</b> ${escapeHTML(o.customer.address)}<br><b>Thanh toán:</b> ${escapeHTML(o.customer.payment)}<br><b>Ngày đặt:</b> ${o.created}</p><hr class="divider">${o.items.map(x=>{const p=savedOrderItem(x);return `<div class="checkout-item"><img src="${img(p.img)}" alt=""><div><b>${escapeHTML(p.name)}</b><div class="muted">Màu ${escapeHTML(x.color)}, size ${escapeHTML(x.size)}, SL ${x.qty}</div></div><b>${money(p.price*x.qty)}</b></div>`}).join('')}<h3>Tổng cộng: <span style="color:var(--red)">${money(o.total)}</span></h3><hr class="divider"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-outline" data-nav="/admin">← Danh sách đơn</button>${o.status==='pending'?`<button class="btn btn-red" data-status="${o.id}:confirmed">✓ Xác nhận đơn</button><button class="btn btn-soft" data-status="${o.id}:cancelled">Từ chối đơn</button>`:''}${o.status==='confirmed'?`<button class="btn btn-red" data-status="${o.id}:shipping">Bàn giao vận chuyển</button>`:''}${o.status==='shipping'?`<button class="btn btn-red" data-status="${o.id}:completed">Đánh dấu đã giao</button>`:''}</div></div></div>`}
 function notFound(){return '<div class="notfound"><h1>Không tìm thấy trang</h1><button class="btn" data-nav="/">Về trang chủ</button></div>'}
-function render(){PRODUCTS=readProducts();const countBefore=state.cart.length;state.cart=state.cart.filter(x=>PRODUCTS.some(p=>p.id===x.id));if(state.cart.length!==countBefore)save();const hash=decodeURIComponent(location.hash.replace(/^#/,''))||'/';const [path,query='']=hash.split('?');const parts=path.split('/').filter(Boolean);let html;if(!parts.length)html=home();else switch(parts[0]){case 'shop':html=shop(new URLSearchParams(query));break;case 'product':html=detailPage(Number(parts[1]));break;case 'cart':html=cart();break;case 'checkout':html=checkout();break;case 'success':html=success(parts[1]);break;case 'orders':html=orders();break;case 'order':html=orderDetail(parts[1]);break;case 'account':html=account();break;case 'admin':location.replace('admin.html?v=single-admin-20261010');return;default:html=notFound()}$('#app').innerHTML=html;document.body.classList.toggle('on-account',parts[0]==='account');setupHeroCarousel();updateCount();window.scrollTo({top:0,behavior:'instant'})}
+function render(){PRODUCTS=readProducts();const countBefore=state.cart.length;state.cart=state.cart.filter(x=>PRODUCTS.some(p=>p.id===x.id));if(state.cart.length!==countBefore)save();const hash=decodeURIComponent(location.hash.replace(/^#/,''))||'/';const [path,query='']=hash.split('?');const parts=path.split('/').filter(Boolean);let html;if(!parts.length)html=home();else switch(parts[0]){case 'shop':html=shop(new URLSearchParams(query));break;case 'product':html=detailPage(Number(parts[1]));break;case 'cart':html=cart();break;case 'checkout':html=checkout();break;case 'success':html=success(parts[1]);break;case 'orders':html=orders();break;case 'order':html=orderDetail(parts[1]);break;case 'account':html=account();break;case 'admin':location.replace('admin.html?v=single-admin-20261010');return;default:html=notFound()}$('#app').innerHTML=html;document.body.classList.toggle('on-account',parts[0]==='account');setupHeroCarousel();setupProductCarousels();updateCount();window.scrollTo({top:0,behavior:'instant'})}
 function changeOrder(id,next){const o=state.orders.find(x=>x.id===id);if(!o)return;const allowed={pending:['confirmed','cancelled'],confirmed:['shipping'],shipping:['completed']};if(!(allowed[o.status]||[]).includes(next))return toast('Không thể thay đổi trạng thái này');o.status=next;save();render();toast('Đã cập nhật trạng thái đơn hàng')}
 window.addEventListener('hashchange',render);
 document.addEventListener('click',e=>{const el=e.target.closest('button,[data-nav]');if(!el)return;if(el.dataset.nav){if(['/checkout','/orders'].includes(el.dataset.nav)&&!requireLogin(el.dataset.nav))return;nav(el.dataset.nav);return}if(el.dataset.voucher){state.voucher=Number(el.dataset.voucher);save();toast('Đã lưu mã FASHION'+state.voucher+' — áp dụng nếu đơn đủ điều kiện');return}if(el.dataset.color){detail.color=el.dataset.color;document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('selected',x===el));$('#colorLabel').textContent=detail.color;return}if(el.dataset.size){detail.size=el.dataset.size;document.querySelectorAll('[data-size]').forEach(x=>x.classList.toggle('selected',x===el));$('#sizeLabel').textContent=detail.size;return}if(el.dataset.qty){detail.qty=Math.max(1,Math.min(20,detail.qty+Number(el.dataset.qty)));$('#detailQty').textContent=detail.qty;return}if(el.dataset.add){addCart(Number(el.dataset.add));return}if(el.dataset.buy){if(!requireLogin('/checkout'))return;addCart(Number(el.dataset.buy),true);return}if(el.dataset.cartqty){const [i,delta]=el.dataset.cartqty.split(':').map(Number);if(state.cart[i]){state.cart[i].qty+=delta;if(state.cart[i].qty<=0)state.cart.splice(i,1);save();render()}return}if(el.dataset.remove!==undefined){state.cart.splice(Number(el.dataset.remove),1);save();render();return}if(el.dataset.status){const [id,next]=el.dataset.status.split(':');changeOrder(id,next);return}if(el.dataset.cancel){if(!state.user||!userOrders().some(o=>o.id===el.dataset.cancel))return toast('Bạn không có quyền hủy đơn này');$('#modal').innerHTML=`<div class="modal-box"><h2>Hủy đơn hàng?</h2><p>Bạn chắc chắn muốn hủy đơn hàng ${escapeHTML(el.dataset.cancel)}?</p><div class="modal-actions"><button class="btn btn-outline" id="closeModal">Không</button><button class="btn btn-red" id="doCancel">Hủy đơn</button></div></div>`;$('#closeModal').onclick=()=>$('#modal').innerHTML='';$('#doCancel').onclick=()=>{$('#modal').innerHTML='';changeOrder(el.dataset.cancel,'cancelled')};return}if(el.id==='applyVoucher'){const v=$('#voucherInput').value.trim().toUpperCase();const n=Number(v.replace('FASHION',''));if(/^FASHION(30|50|100)$/.test(v)){state.voucher=n;save();render();toast('Đã áp dụng mã giảm giá (nếu đủ điều kiện)')}else toast('Mã không hợp lệ. Thử FASHION100, FASHION50 hoặc FASHION30');return}if(el.dataset.social){toast('Đăng nhập '+el.dataset.social+' chưa kết nối trong bản demo HCI.');return}if(el.dataset.authMode){authMode=el.dataset.authMode;render();return}if(el.id==='logout'){state.user=null;save();render();toast('Đã đăng xuất');return}});
