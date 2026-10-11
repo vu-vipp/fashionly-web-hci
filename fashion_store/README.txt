@@ -1,10 +1,10 @@
-FASHIONLY — WEBSITE BÁN QUẦN ÁO (DEMO HCI)
+PHƯƠNG BEAUTY — WEBSITE BÁN QUẦN ÁO (DEMO HCI)
 
 CÁCH CHẠY:
-1. Giải nén Fashionly_Web_HCI.zip.
-2. Mở thư mục fashion_store.
-3. Nháy đúp file index.html để mở trên Chrome/Edge.
-4. Nếu muốn chạy như một website local: mở Terminal tại thư mục này và chạy:
+1. Web đang chạy tại https://vu-vipp.github.io/fashionly-web-hci/fashion_store/
+2. Trang Admin: https://vu-vipp.github.io/fashionly-web-hci/fashion_store/admin.html
+3. Nếu tải mã nguồn, mở index.html trong Chrome/Edge.
+4. Nếu muốn chạy như một website local: mở Terminal tại thư mục fashion_store và chạy:
    python -m http.server 8000
    Sau đó mở http://localhost:8000
 
@@ -25,7 +25,7 @@ THỬ LUỒNG:
 Trang chủ -> sản phẩm -> chọn size + màu -> thêm giỏ -> giỏ hàng
 -> thanh toán -> đặt hàng -> xác nhận -> theo dõi đơn
 -> Admin (truy cập admin.html hoặc link ở trang Tài khoản)
--> đăng nhập tài khoản demo: admin@fashionly.demo / admin123
+-> đăng nhập tài khoản demo: admin@phuongbeauty.demo / admin123 (email cũ admin@fashionly.demo vẫn đăng nhập được)
 -> thêm/sửa/xóa sản phẩm hoặc xử lý đơn -> quay lại cửa hàng để xem thay đổi.
 
 MÃ VOUCHER DEMO:
@@ -48,3 +48,8 @@ LƯU Ý:
 - Ảnh sản phẩm/banner được cắt từ ảnh chụp Figma do người dùng cung cấp,
   nên chất lượng thấp hơn file ảnh gốc. Có thể thay trong thư mục assets.
 - Nội dung, giá và sản phẩm trong web là dữ liệu demo.
+
+THƯƠNG HIỆU:
+- Logo Phương Beauty từ ảnh người dùng cung cấp, tại assets/phuong-beauty-logo.webp.
+- Tên thương hiệu hiển thị đã đổi, màu sắc và bố cục Web không thay đổi.
+- Tên repository GitHub, mã voucher và các khóa localStorage cũ được giữ để tránh mất dữ liệu.
