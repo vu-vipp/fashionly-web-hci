@@ -142,3 +142,6 @@ body.on-account .footer{margin-top:0;padding-top:28px}
   .auth-socials{gap:9px}
   .auth-social{font-size:11px}
 }
+
+/* Trang đăng nhập/đăng ký không hiển thị header và thanh danh mục */
+body.on-account > .header,body.on-account > .nav{display:none!important}
