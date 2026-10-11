@@ -30,7 +30,7 @@ Trang chủ -> sản phẩm -> chọn size + màu -> thêm giỏ -> giỏ hàng
 
 MÃ VOUCHER DEMO:
 FASHION100 (giảm 100.000đ, đơn từ 799.000đ)
-FASHION50 (giảm 50.000đ, đơn từ 399.000đ)
+FASHION50 (giảm 50.000đ, đơn từ 499.000đ)
 FASHION30 (giảm 30.000đ, đơn từ 399.000đ)
 Miễn phí ship từ 499.000đ; dưới mức này ship 30.000đ.
 
